@@ -1,6 +1,6 @@
 {
   "name": "css-expression",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
@@ -43,12 +43,6 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "transform": {
-      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!variables/.*)"
-    ],
     "modulePathIgnorePatterns": [
       "demo"
     ]
@@ -88,7 +82,7 @@
   "author": "Maurice Conrad",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MauriceConrad/css-parse-function/vue3-delay-watch/issues"
+    "url": "https://github.com/MauriceConrad/css-parse-function/issues"
   },
   "homepage": "https://github.com/MauriceConrad/css-parse-function#readme"
 }
