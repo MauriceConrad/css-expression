@@ -1,5 +1,4 @@
 import { parse, stringify } from '../src/index'
-import { ICSSPrimitive, ICSSFunction, ICSSExpression } from '../src/types'
 
 test('stringify easy structure', () => {
   expect(stringify({
@@ -39,7 +38,7 @@ test('stringify easy structure', () => {
           { type: 'primitive', value: 'good', unit: null },
           { type: 'primitive', value: 20, unit: 'em' }
         ]
-      } as ICSSExpression
+      }
     ]
   })).toBe('holy(fucking 99px, bee(42% cool, funny)) (all good 20em)')
 });
@@ -50,9 +49,9 @@ test('stringify complex structure', () => {
     type: 'function',
     name: 'rgb',
     args: [
-      { type: 'primitive', value: 255, unit: null } as ICSSPrimitive,
-      { type: 'primitive', value: 0, unit: null } as ICSSPrimitive,
-      { type: 'primitive', value: 138, unit: null } as ICSSPrimitive
+      { type: 'primitive', value: 255, unit: null },
+      { type: 'primitive', value: 0, unit: null },
+      { type: 'primitive', value: 138, unit: null }
     ]
   })).toBe('rgb(255, 0, 138)')
 });
