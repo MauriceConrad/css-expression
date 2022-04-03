@@ -26,6 +26,8 @@ const args = Object.assign({
 
 const target = args.target;
 
+
+
 const regexImportStatement = new RegExp(args['regex-import-statement']);
 const regexFilename = new RegExp(args['regex-filename']);
 

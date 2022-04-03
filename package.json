@@ -26,7 +26,7 @@
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "build:cjs": "tsc -p tsconfig.cjs.json && echo \"{ \\\"type\\\": \\\"commonjs\\\" }\" > ./lib/cjs/package.json",
-    "build:esm": "tsc -p tsconfig.json && node workflows/rename_js_ext.js --target lib/esm",
+    "build:esm": "tsc -p tsconfig.json && node workflows/rename_js_ext.js --target lib/esm --regex-import-statement \"^\\s*(import|export)\\s{1,}(.*)\\s{1,}from\\s{1,}(\\\"|')(\\.{1,2}\\/.*)(\\\"|');?\\s*$\" --regex-filename \"\\.js\"",
     "build": "rm -rf lib && npm run build:esm && npm run build:cjs",
     "serve": "npm link && npm-watch build"
   },
