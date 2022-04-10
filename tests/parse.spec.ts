@@ -1,4 +1,3 @@
-import { inspect } from 'util';
 import { parse } from '../src/index'
 
 
