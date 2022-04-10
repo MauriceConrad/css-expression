@@ -22,7 +22,7 @@ function __parse(literal: string): ICSSLiteralAny {
       type: 'function',
       name,
       // Extract args from head by seperator /,\s*/ and map the returned literals trough __parse()
-      args: parseArguments(head, /,\s*/, /[^\s]/).map(__parse)
+      args: parseArguments(head, /,\s*/, /[^\s]/).map(parse)
     } as ICSSFunction
   }
   else {

@@ -1,5 +1,98 @@
+import { inspect } from 'util';
 import { parse } from '../src/index'
 
+
+test('test', () => {
+  expect(parse('gradient-map(rgba(78, 21, 21, 1) rgba(204, 135, 90, 1))')).toStrictEqual({
+    raw: 'gradient-map(rgba(78, 21, 21, 1) rgba(204, 135, 90, 1))',
+    type: 'expression',
+    literals: [
+      {
+        raw: 'gradient-map(rgba(78, 21, 21, 1) rgba(204, 135, 90, 1))',
+        type: 'function',
+        name: 'gradient-map',
+        args: [
+          {
+            raw: 'rgba(78, 21, 21, 1) rgba(204, 135, 90, 1)',
+            type: 'expression',
+            literals: [
+              {
+                raw: 'rgba(78, 21, 21, 1)',
+                type: 'function',
+                name: 'rgba',
+                args: [
+                  {
+                    raw: '78',
+                    type: 'expression',
+                    literals: [
+                      { raw: '78', type: 'primitive', value: 78, unit: null }
+                    ]
+                  },
+                  {
+                    raw: '21',
+                    type: 'expression',
+                    literals: [
+                      { raw: '21', type: 'primitive', value: 21, unit: null }
+                    ]
+                  },
+                  {
+                    raw: '21',
+                    type: 'expression',
+                    literals: [
+                      { raw: '21', type: 'primitive', value: 21, unit: null }
+                    ]
+                  },
+                  {
+                    raw: '1',
+                    type: 'expression',
+                    literals: [
+                      { raw: '1', type: 'primitive', value: 1, unit: null }
+                    ]
+                  }
+                ]
+              },
+              {
+                raw: 'rgba(204, 135, 90, 1)',
+                type: 'function',
+                name: 'rgba',
+                args: [
+                  {
+                    raw: '204',
+                    type: 'expression',
+                    literals: [
+                      { raw: '204', type: 'primitive', value: 204, unit: null }
+                    ]
+                  },
+                  {
+                    raw: '135',
+                    type: 'expression',
+                    literals: [
+                      { raw: '135', type: 'primitive', value: 135, unit: null }
+                    ]
+                  },
+                  {
+                    raw: '90',
+                    type: 'expression',
+                    literals: [
+                      { raw: '90', type: 'primitive', value: 90, unit: null }
+                    ]
+                  },
+                  {
+                    raw: '1',
+                    type: 'expression',
+                    literals: [
+                      { raw: '1', type: 'primitive', value: 1, unit: null }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
+})
 
 test('parse simple filters', () => {
   expect(parse(`blur(10px) saturate(1)`)).toStrictEqual({
@@ -11,7 +104,7 @@ test('parse simple filters', () => {
         type: 'function',
         name: 'blur',
         args: [
-          { raw: '10px', type: 'primitive', value: 10, unit: 'px' }
+          { type: 'expression', raw: '10px', literals: [ { raw: '10px', type: 'primitive', value: 10, unit: 'px' } ] }
         ]
       },
       {
@@ -19,12 +112,14 @@ test('parse simple filters', () => {
         type: 'function',
         name: 'saturate',
         args: [
-          { raw: '1', type: 'primitive', value: 1, unit: null }
+          { type: 'expression', raw: '1', literals: [ { raw: '1', type: 'primitive', value: 1, unit: null } ] }
         ]
       }
     ]
   });
 });
+
+
 
 
 
@@ -40,9 +135,9 @@ test('parse function without valid units', () => {
         type: 'function',
         name: 'rgb',
         args: [
-          { raw: '255', type: 'primitive', value: 255, unit: null },
-          { raw: '0', type: 'primitive', value: 0, unit: null },
-          { raw: '138', type: 'primitive', value: 138, unit: null }
+          { type: 'expression', raw: '255', literals: [ { raw: '255', type: 'primitive', value: 255, unit: null } ] },
+          { type: 'expression', raw: '0', literals: [ { raw: '0', type: 'primitive', value: 0, unit: null } ] },
+          { type: 'expression', raw: '138', literals: [ { raw: '138', type: 'primitive', value: 138, unit: null } ] }
         ]
       }
     ]
@@ -59,9 +154,9 @@ test('parse function with -', () => {
         type: 'function',
         name: 'hue-rotate',
         args: [
-          { raw: '255', type: 'primitive', value: 255, unit: null },
-          { raw: '0', type: 'primitive', value: 0, unit: null },
-          { raw: '138', type: 'primitive', value: 138, unit: null }
+          { type: 'expression', raw: '255', literals: [ { raw: '255', type: 'primitive', value: 255, unit: null } ] },
+          { type: 'expression', raw: '0', literals: [ { raw: '0', type: 'primitive', value: 0, unit: null } ] },
+          { type: 'expression', raw: '138', literals: [ { raw: '138', type: 'primitive', value: 138, unit: null } ] }
         ]
       }
     ]
@@ -78,9 +173,9 @@ test('parse function with units', () => {
         type: 'function',
         name: 'rgb',
         args: [
-          { raw: '255em', type: 'primitive', value: 255, unit: 'em' },
-          { raw: '0', type: 'primitive', value: 0, unit: null },
-          { raw: '138%', type: 'primitive', value: 138, unit: '%' }
+          { type: 'expression', raw: '255em', literals: [ { raw: '255em', type: 'primitive', value: 255, unit: 'em' } ] },
+          { type: 'expression', raw: '0', literals: [ { raw: '0', type: 'primitive', value: 0, unit: null } ] },
+          { type: 'expression', raw: '138%', literals: [ { raw: '138%', type: 'primitive', value: 138, unit: '%' } ] }
         ]
       }
     ]
@@ -97,11 +192,11 @@ test('parse function with invalid units and a valid one and some stuff', () => {
         type: 'function',
         name: 'rgb',
         args: [
-          { raw: '!!!255em', type: 'primitive', value: '!!!255em', unit: null },
-          { raw: '0px', type: 'primitive', value: 0, unit: 'px' },
+          { type: 'expression', raw: '!!!255em', literals: [ { raw: '!!!255em', type: 'primitive', value: '!!!255em', unit: null } ] },
+          { type: 'expression', raw: '0px', literals: [ { raw: '0px', type: 'primitive', value: 0, unit: 'px' } ] },
           {
-            raw: '1 38%',
             type: 'expression',
+            raw: '1 38%',
             literals: [
               { raw: '1', type: 'primitive', value: 1, unit: null },
               { raw: '38%', type: 'primitive', value: 38, unit: '%' }
@@ -149,7 +244,6 @@ test('parse primitives with values and units', () => {
   });
 });
 
-
 test('Heavy crazy shit expression', () => {
   expect(parse('10px ((((800)))) hui(200, 500, rgba(400), dont(trust(23, 42, verify), 10000)) (100 (foo bar gay vibes( ss, 10px)) 200 30)  100% hahah was    geht 1.6em 2   /  span 1  ')).toStrictEqual({
     raw: '10px ((((800)))) hui(200, 500, rgba(400), dont(trust(23, 42, verify), 10000)) (100 (foo bar gay vibes( ss, 10px)) 200 30)  100% hahah was    geht 1.6em 2   /  span 1  ',
@@ -171,14 +265,7 @@ test('Heavy crazy shit expression', () => {
                   {
                     raw: '(800)',
                     type: 'expression',
-                    literals: [
-                      {
-                        raw: '800',
-                        type: 'primitive',
-                        value: 800,
-                        unit: null
-                      }
-                    ]
+                    literals: [ { raw: '800', type: 'primitive', value: 800, unit: null } ]
                   }
                 ]
               }
@@ -191,39 +278,77 @@ test('Heavy crazy shit expression', () => {
         type: 'function',
         name: 'hui',
         args: [
-          { raw: '200', type: 'primitive', value: 200, unit: null },
-          { raw: '500', type: 'primitive', value: 500, unit: null },
+          {
+            raw: '200',
+            type: 'expression',
+            literals: [ { raw: '200', type: 'primitive', value: 200, unit: null } ]
+          },
+          {
+            raw: '500',
+            type: 'expression',
+            literals: [ { raw: '500', type: 'primitive', value: 500, unit: null } ]
+          },
           {
             raw: 'rgba(400)',
-            type: 'function',
-            name: 'rgba',
-            args: [ { raw: '400', type: 'primitive', value: 400, unit: null } ]
+            type: 'expression',
+            literals: [
+              {
+                raw: 'rgba(400)',
+                type: 'function',
+                name: 'rgba',
+                args: [
+                  {
+                    raw: '400',
+                    type: 'expression',
+                    literals: [ { raw: '400', type: 'primitive', value: 400, unit: null } ]
+                  }
+                ]
+              }
+            ]
           },
           {
             raw: 'dont(trust(23, 42, verify), 10000)',
-            type: 'function',
-            name: 'dont',
-            args: [
+            type: 'expression',
+            literals: [
               {
-                raw: 'trust(23, 42, verify)',
+                raw: 'dont(trust(23, 42, verify), 10000)',
                 type: 'function',
-                name: 'trust',
+                name: 'dont',
                 args: [
-                  { raw: '23', type: 'primitive', value: 23, unit: null },
-                  { raw: '42', type: 'primitive', value: 42, unit: null },
                   {
-                    raw: 'verify',
-                    type: 'primitive',
-                    value: 'verify',
-                    unit: null
+                    raw: 'trust(23, 42, verify)',
+                    type: 'expression',
+                    literals: [
+                      {
+                        raw: 'trust(23, 42, verify)',
+                        type: 'function',
+                        name: 'trust',
+                        args: [
+                          {
+                            raw: '23',
+                            type: 'expression',
+                            literals: [ { raw: '23', type: 'primitive', value: 23, unit: null } ]
+                          },
+                          {
+                            raw: '42',
+                            type: 'expression',
+                            literals: [ { raw: '42', type: 'primitive', value: 42, unit: null } ]
+                          },
+                          {
+                            raw: 'verify',
+                            type: 'expression',
+                            literals: [ { raw: 'verify', type: 'primitive', value: 'verify', unit: null } ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    raw: '10000',
+                    type: 'expression',
+                    literals: [ { raw: '10000', type: 'primitive', value: 10000, unit: null } ]
                   }
                 ]
-              },
-              {
-                raw: '10000',
-                type: 'primitive',
-                value: 10000,
-                unit: null
               }
             ]
           }
@@ -248,15 +373,13 @@ test('Heavy crazy shit expression', () => {
                 args: [
                   {
                     raw: 'ss',
-                    type: 'primitive',
-                    value: 'ss',
-                    unit: null
+                    type: 'expression',
+                    literals: [ { raw: 'ss', type: 'primitive', value: 'ss', unit: null } ]
                   },
                   {
                     raw: '10px',
-                    type: 'primitive',
-                    value: 10,
-                    unit: 'px'
+                    type: 'expression',
+                    literals: [ { raw: '10px', type: 'primitive', value: 10, unit: 'px' } ]
                   }
                 ]
               }
