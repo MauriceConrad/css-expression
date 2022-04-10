@@ -10,8 +10,9 @@ function isFunctionLiteral(literal: string) {
 
 
 // Recursive parsing function
-export default function parse(literal: string): ICSSLiteralAny {
+function __parse(literal: string): ICSSLiteralAny {
   const raw = literal;
+  
   // Try to parse the current literal as function call
   if (isFunctionLiteral(literal)) {
     // Extract function name and head from valid function match
@@ -20,8 +21,8 @@ export default function parse(literal: string): ICSSLiteralAny {
       raw,
       type: 'function',
       name,
-      // Extract args from head by seperator /,\s*/ and map the returned literals trough parse()
-      args: parseArguments(head, /,\s*/, /[^\s]/).map(parse)
+      // Extract args from head by seperator /,\s*/ and map the returned literals trough __parse()
+      args: parseArguments(head, /,\s*/, /[^\s]/).map(__parse)
     } as ICSSFunction
   }
   else {
@@ -41,12 +42,20 @@ export default function parse(literal: string): ICSSLiteralAny {
       } as ICSSPrimitive
     }
     else {
-      // Seems to be an expresion containing multiple literals, so return it as Expression and map the literals trough parse()
+      // Seems to be an expresion containing multiple literals, so return it as Expression and map the literals trough __parse()
       return {
         raw,
         type: 'expression',
-        literals: literals.map(parse)
+        literals: literals.map(__parse)
       } as ICSSExpression
     }
   }
+}
+
+export default function parse(literal: string): ICSSExpression {
+  const parsed = __parse(`(${ literal })`);
+  return {
+    ...parsed,
+    raw: parsed.raw?.slice(1, -1)
+  } as ICSSExpression;
 }

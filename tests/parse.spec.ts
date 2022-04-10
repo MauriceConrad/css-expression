@@ -1,27 +1,69 @@
 import { parse } from '../src/index'
 
+
+test('parse simple filters', () => {
+  expect(parse(`blur(10px) saturate(1)`)).toStrictEqual({
+    raw: 'blur(10px) saturate(1)',
+    type: 'expression',
+    literals: [
+      {
+        raw: 'blur(10px)',
+        type: 'function',
+        name: 'blur',
+        args: [
+          { raw: '10px', type: 'primitive', value: 10, unit: 'px' }
+        ]
+      },
+      {
+        raw: 'saturate(1)',
+        type: 'function',
+        name: 'saturate',
+        args: [
+          { raw: '1', type: 'primitive', value: 1, unit: null }
+        ]
+      }
+    ]
+  });
+});
+
+
+
+
+
 test('parse function without valid units', () => {
   expect(parse('rgb(255, 0, 138)')).toStrictEqual({
     raw: 'rgb(255, 0, 138)',
-    type: 'function',
-    name: 'rgb',
-    args: [
-      { raw: '255', type: 'primitive', value: 255, unit: null },
-      { raw: '0', type: 'primitive', value: 0, unit: null },
-      { raw: '138', type: 'primitive', value: 138, unit: null }
+    type: 'expression',
+    literals: [
+      {
+        raw: 'rgb(255, 0, 138)',
+        type: 'function',
+        name: 'rgb',
+        args: [
+          { raw: '255', type: 'primitive', value: 255, unit: null },
+          { raw: '0', type: 'primitive', value: 0, unit: null },
+          { raw: '138', type: 'primitive', value: 138, unit: null }
+        ]
+      }
     ]
   });
 });
 
 test('parse function with -', () => {
   expect(parse('hue-rotate(255, 0, 138)')).toStrictEqual({
+    type: 'expression',
     raw: 'hue-rotate(255, 0, 138)',
-    type: 'function',
-    name: 'hue-rotate',
-    args: [
-      { raw: '255', type: 'primitive', value: 255, unit: null },
-      { raw: '0', type: 'primitive', value: 0, unit: null },
-      { raw: '138', type: 'primitive', value: 138, unit: null }
+    literals: [
+      {
+        raw: 'hue-rotate(255, 0, 138)',
+        type: 'function',
+        name: 'hue-rotate',
+        args: [
+          { raw: '255', type: 'primitive', value: 255, unit: null },
+          { raw: '0', type: 'primitive', value: 0, unit: null },
+          { raw: '138', type: 'primitive', value: 138, unit: null }
+        ]
+      }
     ]
   });
 });
@@ -29,30 +71,42 @@ test('parse function with -', () => {
 test('parse function with units', () => {
   expect(parse('rgb(255em, 0, 138%)')).toStrictEqual({
     raw: 'rgb(255em, 0, 138%)',
-    type: 'function',
-    name: 'rgb',
-    args: [
-      { raw: '255em', type: 'primitive', value: 255, unit: 'em' },
-      { raw: '0', type: 'primitive', value: 0, unit: null },
-      { raw: '138%', type: 'primitive', value: 138, unit: '%' }
+    type: 'expression',
+    literals: [
+      {
+        raw: 'rgb(255em, 0, 138%)',
+        type: 'function',
+        name: 'rgb',
+        args: [
+          { raw: '255em', type: 'primitive', value: 255, unit: 'em' },
+          { raw: '0', type: 'primitive', value: 0, unit: null },
+          { raw: '138%', type: 'primitive', value: 138, unit: '%' }
+        ]
+      }
     ]
   });
 });
 
 test('parse function with invalid units and a valid one and some stuff', () => {
   expect(parse('rgb(!!!255em, 0px, 1 38%)')).toStrictEqual({
+    type: 'expression',
     raw: 'rgb(!!!255em, 0px, 1 38%)',
-    type: 'function',
-    name: 'rgb',
-    args: [
-      { raw: '!!!255em', type: 'primitive', value: '!!!255em', unit: null },
-      { raw: '0px', type: 'primitive', value: 0, unit: 'px' },
+    literals: [
       {
-        raw: '1 38%',
-        type: 'expression',
-        literals: [
-          { raw: '1', type: 'primitive', value: 1, unit: null },
-          { raw: '38%', type: 'primitive', value: 38, unit: '%' }
+        raw: 'rgb(!!!255em, 0px, 1 38%)',
+        type: 'function',
+        name: 'rgb',
+        args: [
+          { raw: '!!!255em', type: 'primitive', value: '!!!255em', unit: null },
+          { raw: '0px', type: 'primitive', value: 0, unit: 'px' },
+          {
+            raw: '1 38%',
+            type: 'expression',
+            literals: [
+              { raw: '1', type: 'primitive', value: 1, unit: null },
+              { raw: '38%', type: 'primitive', value: 38, unit: '%' }
+            ]
+          }
         ]
       }
     ]
