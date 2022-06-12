@@ -1,6 +1,6 @@
 export { default as parse } from './parse'
 export { default as stringify } from './stringify'
-export { default as parseArguments } from './parseArguments'
+export { default as parseArguments, parseArgumentsIndex } from './parseArguments'
 export { default as parseExpression } from './parseExpression'
 export { default as parsePrimitive } from './parsePrimitive'
 
