@@ -1,12 +1,12 @@
 import { indexOf } from './indexOf'
 import findExprEnd from './findExprEnd'
 
-export function parseArgumentsIndex(str: string, delimiter: RegExp, argStartRegex: RegExp): { start: number; end: number; }[] {
+export function parseArgumentsIndex(str: string, delimiter: RegExp, argStartRegex: RegExp, brackets = [/\(/, /\)/]): { start: number; end: number; }[] {
   let cursor = 0;
   const args: { start: number; end: number; }[] = [];
   while (indexOf(str, argStartRegex, cursor) > -1) {
     const argStartPos = indexOf(str, argStartRegex, cursor);
-    const endPos = findExprEnd(str, argStartPos, delimiter);
+    const endPos = findExprEnd(str, argStartPos, delimiter, brackets);
     args.push({ start: argStartPos, end: endPos });
     cursor = endPos + 1;
     if (endPos == -1) {

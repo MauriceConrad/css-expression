@@ -5,8 +5,11 @@ export default function findExprEnd(str: string, start: number, delimiter: RegEx
   let cursor = start;
   while (cursor < str.length) {
     const nextDelimiterPos = indexOf(str, delimiter, cursor) > -1 ? indexOf(str, delimiter, cursor) : Infinity;
-    const openingBracketsBeforeNextDelimiter = indexOfAll(str.slice(0, nextDelimiterPos), brackets[0], start);
-    const closingBracketsBeforeNextDelimiter = indexOfAll(str.slice(0, nextDelimiterPos), brackets[1], start);
+
+    const potentiallyCorrectExpr = str.slice(0, nextDelimiterPos + 1);
+
+    const openingBracketsBeforeNextDelimiter = indexOfAll(potentiallyCorrectExpr, brackets[0], start);
+    const closingBracketsBeforeNextDelimiter = indexOfAll(potentiallyCorrectExpr, brackets[1], start);
 
     if (openingBracketsBeforeNextDelimiter.length - closingBracketsBeforeNextDelimiter.length <= 0) {
       return nextDelimiterPos;
